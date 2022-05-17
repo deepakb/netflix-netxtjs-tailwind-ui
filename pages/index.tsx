@@ -18,6 +18,7 @@ const Home: NextPage = () => {
         src="/hero-bg.jpg"
         objectFit="cover"
         className="-z-10"
+        alt="Netflix UI"
       />
       <Head>
         <title>Netflix UI</title>
