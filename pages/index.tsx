@@ -1,6 +1,5 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import Image from 'next/image';
 
 const Home: NextPage = () => {
   const session = undefined;
@@ -8,18 +7,11 @@ const Home: NextPage = () => {
   return (
     <div
       className="flex flex-col items-center justify-center min-h-screen bg-black"
-      // style={{
-      //   backgroundImage:
-      //     'linear-gradient(rgb(0 0 0 / 60%), rgb(0 0 0 / 60%)), url(/hero-bg.jpg)',
-      // }}
+      style={{
+        backgroundImage:
+          'linear-gradient(rgb(0 0 0 / 60%), rgb(0 0 0 / 60%)), url(/hero-bg.jpg)',
+      }}
     >
-      <Image
-        layout="fill"
-        src="/hero-bg.jpg"
-        objectFit="cover"
-        className="-z-10"
-        alt="Netflix UI"
-      />
       <Head>
         <title>Netflix UI</title>
         <link rel="preconnect" href="https://fonts.gstatic.com" />
