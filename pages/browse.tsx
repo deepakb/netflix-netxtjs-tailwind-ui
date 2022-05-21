@@ -1,24 +1,102 @@
 import type { NextPage } from 'next';
+import Head from 'next/head';
 import React from 'react';
+import Banner from '../components/Banner';
+import Header from '../components/Header';
+import Panel from '../components/Panel';
+import requests from '../utils/requests';
+import { Movie } from '../utils/types';
 
-const browse: NextPage = () => {
+interface Props {
+  netflixOriginals: Movie[];
+  trendingNow: Movie[];
+  topRated: Movie[];
+  actionMovies: Movie[];
+  comedyMovies: Movie[];
+  horrorMovies: Movie[];
+  romanceMovies: Movie[];
+  documentaries: Movie[];
+}
+
+const browse: NextPage<Props> = ({
+  netflixOriginals,
+  trendingNow,
+  topRated,
+  actionMovies,
+  comedyMovies,
+  horrorMovies,
+  romanceMovies,
+  documentaries,
+}) => {
   return (
-    <div>
-      <div>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0.238 0.034 919.406 248.488"
-          className="w-10 cursor-pointer object-contain"
-        >
-          <path
-            fill="#e50914"
-            d="M870.46 118.314l49.184 130.208c-14.495-2.07-28.982-4.663-43.733-6.999l-27.707-71.945-28.468 66.006c-13.973-2.336-27.698-3.114-41.672-4.928l49.955-113.89L782.71.034h41.937l25.362 65.22L877.194.034h42.442zM749.596.034h-38.052v225.71c12.425.779 25.362 1.292 38.052 2.841zm-70.927 223.118c-34.68-2.328-69.37-4.39-104.829-5.177V.035h38.823v181.188c22.264.514 44.52 2.32 66.006 3.355zM532.417 88.305v38.822h-53.06v88.263h-38.3V.034H549.77v38.822h-70.405v49.45h53.06zM375.82 38.856v178.605c-12.946 0-26.14 0-38.83.514V38.856h-40.122V.034H416.19v38.822zM254.94 129.19c-17.08 0-37.274 0-51.769.787v57.715c22.778-1.557 45.556-3.363 68.59-4.141v37.273l-107.412 8.548V.034h107.405v38.822H203.17v52.29c15.017 0 38.052-.778 51.768-.778v38.83zM39.831 107.447V243.08c-13.965 1.557-26.398 3.371-39.593 5.442V.034h37.017L87.724 141.11V.034h38.83V232.47c-13.717 2.336-27.698 3.114-42.45 5.177z"
-          />
-        </svg>
-      </div>
-      <div></div>
+    <div
+      className={`lg:h-[140vh]' } relative h-screen bg-gradient-to-b from-gray-900/10
+      to-[#010511]`}
+    >
+      <Head>
+        <title>Netflix UI</title>
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap"
+          rel="stylesheet"
+        />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      <Header />
+      <main className="flex flex-1 flex-col px-5 pt-20">
+        <Banner netflixOriginals={netflixOriginals} />
+
+        <section className="md:space-y-24">
+          <Panel title="Trending Now" movies={trendingNow} />
+          <Panel title="Top Rated" movies={topRated} />
+          <Panel title="Action Thrillers" movies={actionMovies} />
+          {/* My List */}
+          {/* {list.length > 0 && <Row title="My List" movies={list} />} */}
+
+          <Panel title="Comedies" movies={comedyMovies} />
+          <Panel title="Scary Movies" movies={horrorMovies} />
+          <Panel title="Romance Movies" movies={romanceMovies} />
+          <Panel title="Documentaries" movies={documentaries} />
+        </section>
+      </main>
     </div>
   );
 };
 
 export default browse;
+
+export const getServerSideProps = async () => {
+  const [
+    netflixOriginals,
+    trendingNow,
+    topRated,
+    actionMovies,
+    comedyMovies,
+    horrorMovies,
+    romanceMovies,
+    documentaries,
+  ] = await Promise.all([
+    fetch(requests.fetchNetflixOriginals).then((res) => res.json()),
+    fetch(requests.fetchTrending).then((res) => res.json()),
+    fetch(requests.fetchTopRated).then((res) => res.json()),
+    fetch(requests.fetchActionMovies).then((res) => res.json()),
+    fetch(requests.fetchComedyMovies).then((res) => res.json()),
+    fetch(requests.fetchHorrorMovies).then((res) => res.json()),
+    fetch(requests.fetchRomanceMovies).then((res) => res.json()),
+    fetch(requests.fetchDocumentaries).then((res) => res.json()),
+  ]);
+
+  return {
+    props: {
+      netflixOriginals: netflixOriginals.results,
+      trendingNow: trendingNow.results,
+      topRated: topRated.results,
+      actionMovies: actionMovies.results,
+      comedyMovies: comedyMovies.results,
+      horrorMovies: horrorMovies.results,
+      romanceMovies: romanceMovies.results,
+      documentaries: documentaries.results,
+    },
+  };
+};
